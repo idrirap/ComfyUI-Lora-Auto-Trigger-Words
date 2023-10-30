@@ -25,17 +25,17 @@ These loaders have two custom outputs:
 - civitai_tags_list: a python list of the tags related to this lora on civitai
 - meta_tags_list: a python list of the tags used for training the lora embeded in it (if any)
 This outputs needs to be filtered by two othere nodes:
-- TagsFormater: list in a comprehensible way the available tags
+- TagsFormater: Helper to show the available tag and their indexes
 - tagsSelector: allow to filter tags and apply a weight to it.
 #### Filtering
 The format is simple. It's the same as python list index, but can select multiple index or ranges of indexes separated by comas.
 `Ex: 0, 3, 5:8, -8:`
-Select a specific list of indexes: `0, 2, 3, 15`...
-Select range of indexes: `2:5, 10:15`...
-Select a range from the begining to a specific index: `:5`
-Select a range from a specific index to the end: `5:`
-You can use negative indexes. Like `-1` to select the last tag
-By default `:` selects everything
+- Select a specific list of indexes: `0, 2, 3, 15`...
+- Select range of indexes: `2:5, 10:15`...
+- Select a range from the begining to a specific index: `:5`
+- Select a range from a specific index to the end: `5:`
+- You can use negative indexes. Like `-1` to select the last tag
+- By default `:` selects everything
 
 #### Example of normal workflow
 ![image](./images/loaderAdvanced.png)
