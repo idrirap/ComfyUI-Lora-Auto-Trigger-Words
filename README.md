@@ -3,6 +3,7 @@
 This project is a fork of https://github.com/Extraltodeus/LoadLoraWithTags
 The aim of these custom nodes is to get an _easy_ access to the tags used to trigger a lora. 
 This project is compatible with Stacked Loras from https://github.com/LucianoCirino/efficiency-nodes-comfyui/releases
+I talk about **lora**, but works with **lycoris** too.
 
 ## Install
 Some of this project nodes depends on https://github.com/pythongosssss/ComfyUI-Custom-Scripts :
@@ -27,6 +28,10 @@ These loaders have two custom outputs:
 This outputs needs to be filtered by two othere nodes:
 - TagsFormater: Helper to show the available tag and their indexes
 - tagsSelector: allow to filter tags and apply a weight to it.
+    - TagSelector contains four parameters. First the selector (see Filtering next)
+    - The weight `(tag:weight)`
+    - The boolean `ensure_comma`. To properly append comma if a prefix or suffix is added.
+    - The boolean `append_loraname_if_empty` which will add the name of the lora in the list of outputs if they are empty.
 #### Filtering
 The format is simple. It's the same as python list index, but can select multiple index or ranges of indexes separated by comas.
 `Ex: 0, 3, 5:8, -8:`
