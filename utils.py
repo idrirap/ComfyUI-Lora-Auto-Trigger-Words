@@ -178,6 +178,9 @@ def parse_selector(selector, tags_list):
     for range_index in range_index_list:
         # single value
         if range_index.count(":") == 0:
+            # remove empty values
+            if range_index.strip() == "":
+                continue
             index = int(range_index)
             # ignore out of bound indexes
             if abs(index) > len(tags_list) - 1:
