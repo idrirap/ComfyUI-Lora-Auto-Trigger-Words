@@ -171,12 +171,17 @@ def sort_tags_by_frequency(meta_tags):
         return []
 
 def parse_selector(selector, tags_list): 
+    if len(tags_list) == 0:
+        return ""
     range_index_list = selector.split(",")
     output = {}
     for range_index in range_index_list:
         # single value
         if range_index.count(":") == 0:
             index = int(range_index)
+            # ignore out of bound indexes
+            if abs(index) > len(tags_list) - 1:
+                continue
             output[index] = tags_list[index]
 
         # actual range
@@ -196,6 +201,9 @@ def parse_selector(selector, tags_list):
                 start = len(tags_list) + start
             if end < 0:
                 end = len(tags_list) + end
+            # clamp start and end values within list boundaries
+            start, end = min(start, len(tags_list)-1), min(end, len(tags_list)-1)
+            start, end = max(start, 0), max(end, 0)
             # merge all
             for i in range(start, end):
                 output[i] = tags_list[i]
