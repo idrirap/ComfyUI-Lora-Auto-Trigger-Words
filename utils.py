@@ -171,12 +171,20 @@ def sort_tags_by_frequency(meta_tags):
         return []
 
 def parse_selector(selector, tags_list): 
+    if len(tags_list) == 0:
+        return ""
     range_index_list = selector.split(",")
     output = {}
     for range_index in range_index_list:
         # single value
         if range_index.count(":") == 0:
+            # remove empty values
+            if range_index.strip() == "":
+                continue
             index = int(range_index)
+            # ignore out of bound indexes
+            if abs(index) > len(tags_list) - 1:
+                continue
             output[index] = tags_list[index]
 
         # actual range
@@ -196,7 +204,21 @@ def parse_selector(selector, tags_list):
                 start = len(tags_list) + start
             if end < 0:
                 end = len(tags_list) + end
+            # clamp start and end values within list boundaries
+            start, end = min(start, len(tags_list)), min(end, len(tags_list))
+            start, end = max(start, 0), max(end, 0)
             # merge all
             for i in range(start, end):
                 output[i] = tags_list[i]
     return ", ".join(list(output.values()))
+
+def append_lora_name_if_empty(tags_list, lora_path, enabled):
+    if not enabled or len(tags_list) > 0:
+        return tags_list
+    print("AAA : " + lora_path)
+    filename = os.path.splitext(lora_path)[0]
+    filename = os.path.basename(filename)
+    print("BBB : " + filename)
+
+    tags_list.append(filename)
+    return tags_list

@@ -74,7 +74,7 @@ class TagsSelector:
                 "tags_list": ("LIST", {"default": []}),
                 "selector": ("STRING", {"default": ":"}),
                 "weight": ("FLOAT", {"default": 1.0, "min": -10.0, "max": 10.0, "step": 0.01}),
-                "ensure_coma": ("BOOLEAN", {"default": True})
+                "ensure_comma": ("BOOLEAN", {"default": True})
             },
             "optional": {
                 "prefix":("STRING", {"default":"", "forceInput": True}), 
@@ -86,11 +86,11 @@ class TagsSelector:
     FUNCTION = "select_tags"
     CATEGORY = "autotrigger"
 
-    def select_tags(self, tags_list, selector, weight, ensure_coma, prefix="", suffix=""):
+    def select_tags(self, tags_list, selector, weight, ensure_comma, prefix="", suffix=""):
         if weight != 1.0:
             tags_list = [f"({tag}:{weight})" for tag in tags_list]
         output = parse_selector(selector, tags_list)
-        if ensure_coma:
+        if ensure_comma:
             striped_prefix = prefix.strip()
             striped_suffix = suffix.strip()
             if striped_prefix != "" and not striped_prefix.endswith(",") and output != "" and not output.startswith(","):
