@@ -84,12 +84,11 @@ class LoraLoaderStackedVanilla:
         civitai_tags_list = append_lora_name_if_empty(civitai_tags_list, lora_name, append_loraname_if_empty)
         meta_tags_list = append_lora_name_if_empty(meta_tags_list, lora_name, append_loraname_if_empty)
 
+        loras = [(lora_name,lora_weight,lora_weight,)]
         if lora_stack is not None:
-            lora_stack.append((lora_name,lora_weight,lora_weight,))
-        else:
-            lora_stack = [(lora_name,lora_weight,lora_weight,)]
+            loras.extend(lora_stack)
 
-        return (civitai_tags_list, meta_tags_list, lora_stack)
+        return (civitai_tags_list, meta_tags_list, loras)
 
 class LoraLoaderAdvanced:
     def __init__(self):
@@ -185,10 +184,9 @@ class LoraLoaderStackedAdvanced:
         civitai_tags_list = append_lora_name_if_empty(civitai_tags_list, lora_name["content"], append_loraname_if_empty)
         meta_tags_list = append_lora_name_if_empty(meta_tags_list, lora_name["content"], append_loraname_if_empty)
 
+        loras = [(lora_name["content"],lora_weight,lora_weight,)]
         if lora_stack is not None:
-            lora_stack.append((lora_name["content"],lora_weight,lora_weight,))
-        else:
-            lora_stack = [(lora_name["content"],lora_weight,lora_weight,)]
+            loras.extend(lora_stack)
 
         if enable_preview:
             _, preview = copy_preview_to_temp(lora_name["image"])
@@ -198,9 +196,9 @@ class LoraLoaderStackedAdvanced:
                     "subfolder": "lora_preview",
                     "type": "temp"
                 }
-                return {"ui": {"images": [preview_output]}, "result": (civitai_tags_list, meta_tags_list, lora_stack)}
+                return {"ui": {"images": [preview_output]}, "result": (civitai_tags_list, meta_tags_list, loras)}
         
-        return {"result": (civitai_tags_list, meta_tags_list, lora_stack)}
+        return {"result": (civitai_tags_list, meta_tags_list, loras)}
 
 
 # A dictionary that contains all nodes you want to export with their names
