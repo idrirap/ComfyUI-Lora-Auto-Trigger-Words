@@ -103,21 +103,21 @@ def load_and_save_tags(lora_name, force_fetch):
         output_tags_list = []
 
     lora_path = folder_paths.get_full_path("loras", lora_name)
-    if lora_tags is None or force_fetch: # search on civitai only if no local cache or forced
-        print("calculating lora hash")
+    if lora_tags is None or force_fetch or output_tags is None: # search on civitai only if no local cache or forced
+        print("[Lora-Auto-Trigger] calculating lora hash")
         LORAsha256 = calculate_sha256(lora_path)
-        print("requesting infos")
+        print("[Lora-Auto-Trigger] requesting infos")
         model_info = get_model_version_info(LORAsha256)
         if model_info is not None:
             if "trainedWords" in model_info:
-                print("tags found!")
+                print("[Lora-Auto-Trigger] tags found!")
                 if lora_tags is None:
                     lora_tags = {}
                 lora_tags[lora_name] = model_info["trainedWords"]
-                save_dict_to_json(lora_tags,json_tags_path)
+                save_dict_to_json(lora_tags, json_tags_path)
                 output_tags_list = model_info["trainedWords"]
         else:
-            print("No informations found.")
+            print("[Lora-Auto-Trigger] No informations found.")
             if lora_tags is None:
                     lora_tags = {}
             lora_tags[lora_name] = []
