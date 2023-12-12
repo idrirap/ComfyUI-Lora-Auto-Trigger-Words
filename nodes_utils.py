@@ -1,5 +1,3 @@
-import random
-
 from .utils import *
 
 class FusionText:
@@ -20,11 +18,13 @@ class Randomizer:
         return {
             "required": {
                "text_1":("STRING", {"forceInput": True}), 
-               "lora_1":("LORA_STACK", ), 
                "text_2":("STRING", {"forceInput": True} ), 
-               "lora_2":("LORA_STACK", ), 
                "seed": ("INT", {"default": 0, "min": 0, "max": 0xffffffffffffffff}),
             },
+            "optional": {
+                "lora_1":("LORA_STACK", ), 
+                "lora_2":("LORA_STACK", ), 
+            }
         }
 
     RETURN_TYPES = ("STRING", "LORA_STACK")
@@ -35,9 +35,8 @@ class Randomizer:
 
     CATEGORY = "autotrigger"
 
-    def randomize(self, text_1, lora_1, text_2, lora_2, seed):
-        random.seed(seed)
-        if random.random() < .5:
+    def randomize(self, text_1, text_2, seed, lora_1=[], lora_2=[]):
+        if seed %2 == 0:
             return (text_1, lora_1)
         return (text_2, lora_2)
     
@@ -121,6 +120,25 @@ class TagsFormater:
 
         return (output,)
 
+class LoraListNames:
+    @classmethod
+    def INPUT_TYPES(s):
+        LORA_LIST = sorted(folder_paths.get_filename_list("loras"), key=str.lower)
+        return {
+            "required": { 
+                "lora_name": (LORA_LIST,),
+            }
+        }
+
+    RETURN_TYPES = ("STRING",)
+    RETURN_NAMES = ("lora_name",)
+    FUNCTION = "output_selected"
+    CATEGORY = "autotrigger"
+
+    def output_selected(self, lora_name):
+        name = lora_name
+        return (name,)
+
 # A dictionary that contains all nodes you want to export with their names
 # NOTE: names should be globally unique
 NODE_CLASS_MAPPINGS = {
@@ -129,6 +147,7 @@ NODE_CLASS_MAPPINGS = {
     "TextInputBasic": TextInputBasic,
     "TagsSelector": TagsSelector,
     "TagsFormater": TagsFormater,
+    "LoraListNames": LoraListNames,
 }
 
 # A dictionary that contains the friendly/humanly readable titles for the nodes
@@ -138,4 +157,5 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "TextInputBasic": "TextInputBasic",
     "TagsSelector": "TagsSelector",
     "TagsFormater": "TagsFormater",
+    "LoraListNames": "LoraListNames",
 }
