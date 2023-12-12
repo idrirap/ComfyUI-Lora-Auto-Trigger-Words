@@ -16,10 +16,13 @@ class LoraLoaderVanilla:
                 "model": ("MODEL",),
                 "clip": ("CLIP", ),
                 "lora_name": (LORA_LIST, ),
-                "strength_model": ("FLOAT", {"default": 1.0, "min": 0.0, "max": 2.0, "step": 0.1}),
-                "strength_clip": ("FLOAT", {"default": 1.0, "min": 0.0, "max": 2.0, "step": 0.1}),
+                "strength_model": ("FLOAT", {"default": 1.0, "min": -10.0, "max": 10.0, "step": 0.01}),
+                "strength_clip": ("FLOAT", {"default": 1.0, "min": -10.0, "max": 10.0, "step": 0.01}),
                 "force_fetch": ("BOOLEAN", {"default": False}),
                 "append_loraname_if_empty": ("BOOLEAN", {"default": False}),
+            },
+            "optional": {
+                "override_lora_name":("STRING", {"forceInput": True}), 
             }
         }
     
@@ -28,7 +31,9 @@ class LoraLoaderVanilla:
     FUNCTION = "load_lora"
     CATEGORY = "autotrigger"
 
-    def load_lora(self, model, clip, lora_name, strength_model, strength_clip, force_fetch, append_loraname_if_empty):
+    def load_lora(self, model, clip, lora_name, strength_model, strength_clip, force_fetch, append_loraname_if_empty, override_lora_name=""):
+        if override_lora_name != "":
+            lora_name = override_lora_name
         meta_tags_list = sort_tags_by_frequency(get_metadata(lora_name, "loras"))
         civitai_tags_list = load_and_save_tags(lora_name, force_fetch)
 
@@ -66,6 +71,7 @@ class LoraLoaderStackedVanilla:
             },
             "optional": {
                 "lora_stack": ("LORA_STACK", ),
+                "override_lora_name":("STRING", {"forceInput": True}), 
             }
         }
 
@@ -75,7 +81,9 @@ class LoraLoaderStackedVanilla:
     #OUTPUT_NODE = False
     CATEGORY = "autotrigger"
 
-    def set_stack(self, lora_name, lora_weight, force_fetch, append_loraname_if_empty, lora_stack=None):
+    def set_stack(self, lora_name, lora_weight, force_fetch, append_loraname_if_empty, lora_stack=None, override_lora_name=""):
+        if override_lora_name != "":
+            lora_name = override_lora_name
         civitai_tags_list = load_and_save_tags(lora_name, force_fetch)
 
         meta_tags = get_metadata(lora_name, "loras")
@@ -103,11 +111,14 @@ class LoraLoaderAdvanced:
                 "model": ("MODEL",),
                 "clip": ("CLIP", ),
                 "lora_name": (LORA_LIST, ),
-                "strength_model": ("FLOAT", {"default": 1.0, "min": 0.0, "max": 2.0, "step": 0.1}),
-                "strength_clip": ("FLOAT", {"default": 1.0, "min": 0.0, "max": 2.0, "step": 0.1}),
+                "strength_model": ("FLOAT", {"default": 1.0, "min": -10.0, "max": 10.0, "step": 0.01}),
+                "strength_clip": ("FLOAT", {"default": 1.0, "min": -10.0, "max": 10.0, "step": 0.01}),
                 "force_fetch": ("BOOLEAN", {"default": False}),
                 "enable_preview": ("BOOLEAN", {"default": False}),
                 "append_loraname_if_empty": ("BOOLEAN", {"default": False}),
+            },
+            "optional": {
+                "override_lora_name":("STRING", {"forceInput": True}), 
             }
         }
     
@@ -116,7 +127,10 @@ class LoraLoaderAdvanced:
     FUNCTION = "load_lora"
     CATEGORY = "autotrigger"
 
-    def load_lora(self, model, clip, lora_name, strength_model, strength_clip, force_fetch, enable_preview, append_loraname_if_empty):
+    def load_lora(self, model, clip, lora_name, strength_model, strength_clip, force_fetch, enable_preview, append_loraname_if_empty, override_lora_name=""):
+        if override_lora_name != "":
+            lora_name = {"content": override_lora_name, "image": ""}
+        
         meta_tags_list = sort_tags_by_frequency(get_metadata(lora_name["content"], "loras"))
         civitai_tags_list = load_and_save_tags(lora_name["content"], force_fetch)
 
@@ -166,6 +180,7 @@ class LoraLoaderStackedAdvanced:
             },
             "optional": {
                 "lora_stack": ("LORA_STACK", ),
+                "override_lora_name":("STRING", {"forceInput": True}), 
             }
         }
 
@@ -175,7 +190,10 @@ class LoraLoaderStackedAdvanced:
     #OUTPUT_NODE = False
     CATEGORY = "autotrigger"
 
-    def set_stack(self, lora_name, lora_weight, force_fetch, enable_preview, append_loraname_if_empty, lora_stack=None):
+    def set_stack(self, lora_name, lora_weight, force_fetch, enable_preview, append_loraname_if_empty, lora_stack=None, override_lora_name=""):
+        if override_lora_name != "":
+            lora_name = {"content": override_lora_name, "image": ""}
+        
         civitai_tags_list = load_and_save_tags(lora_name["content"], force_fetch)
 
         meta_tags = get_metadata(lora_name["content"], "loras")
@@ -200,6 +218,37 @@ class LoraLoaderStackedAdvanced:
         
         return {"result": (civitai_tags_list, meta_tags_list, loras)}
 
+class LoraTagsOnly:
+    @classmethod
+    def INPUT_TYPES(s):
+        LORA_LIST = sorted(folder_paths.get_filename_list("loras"), key=str.lower)
+        return {
+            "required": { 
+                "lora_name": (LORA_LIST,),
+                "force_fetch": ("BOOLEAN", {"default": False}),
+                "append_loraname_if_empty": ("BOOLEAN", {"default": False}),
+            },
+            "optional": {
+                "override_lora_name":("STRING", {"forceInput": True}), 
+            }
+        }
+
+    RETURN_TYPES = ("LIST", "LIST")
+    RETURN_NAMES = ("civitai_tags_list", "meta_tags_list")
+    FUNCTION = "ask_lora"
+    CATEGORY = "autotrigger"
+
+    def ask_lora(self, lora_name, force_fetch, append_loraname_if_empty, override_lora_name=""):
+        if override_lora_name != "":
+            lora_name = override_lora_name
+        meta_tags_list = sort_tags_by_frequency(get_metadata(lora_name, "loras"))
+        civitai_tags_list = load_and_save_tags(lora_name, force_fetch)
+
+        meta_tags_list = append_lora_name_if_empty(meta_tags_list, lora_name, append_loraname_if_empty)
+        civitai_tags_list = append_lora_name_if_empty(civitai_tags_list, lora_name, append_loraname_if_empty)
+
+        return (civitai_tags_list, meta_tags_list)
+
 
 # A dictionary that contains all nodes you want to export with their names
 # NOTE: names should be globally unique
@@ -208,6 +257,7 @@ NODE_CLASS_MAPPINGS = {
     "LoraLoaderStackedVanilla": LoraLoaderStackedVanilla,
     "LoraLoaderAdvanced": LoraLoaderAdvanced,
     "LoraLoaderStackedAdvanced": LoraLoaderStackedAdvanced,
+    "LoraTagsOnly": LoraTagsOnly,
 }
 
 # A dictionary that contains the friendly/humanly readable titles for the nodes
@@ -216,4 +266,5 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "LoraLoaderStackedVanilla": "LoraLoaderStackedVanilla",
     "LoraLoaderAdvanced": "LoraLoaderAdvanced",
     "LoraLoaderStackedAdvanced": "LoraLoaderStackedAdvanced",
+    "LoraTagsOnly": "LoraTagsOnly",
 }
