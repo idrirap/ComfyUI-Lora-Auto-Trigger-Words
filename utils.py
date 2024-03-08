@@ -66,7 +66,7 @@ def load_json_from_file(file_path):
         return None
     except json.JSONDecodeError:
         print(f"Error decoding JSON in file: {file_path}")
-        return None
+        raise
 
 def save_dict_to_json(data_dict, file_path):
     try:
