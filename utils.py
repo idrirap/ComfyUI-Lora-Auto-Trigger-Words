@@ -31,6 +31,8 @@ def copy_preview_to_temp(file_name):
     lora_less = "/".join(file_name.split("/")[1:])
 
     file_path = folder_paths.get_full_path("loras", lora_less)
+    if file_path is None:
+        return None, None
 
     temp_path = folder_paths.get_temp_directory()
     preview_path = os.path.join(temp_path, "lora_preview")

@@ -129,7 +129,9 @@ class LoraLoaderAdvanced:
 
     def load_lora(self, model, clip, lora_name, strength_model, strength_clip, force_fetch, enable_preview, append_loraname_if_empty, override_lora_name=""):
         if override_lora_name != "":
-            lora_name = {"content": override_lora_name, "image": ""}
+            has_preview, prev = get_preview_path(override_lora_name, "loras")
+            prev = f"loras/{prev}" if has_preview else None
+            lora_name = {"content": override_lora_name, "image": prev, "type": "loras"}
         
         meta_tags_list = sort_tags_by_frequency(get_metadata(lora_name["content"], "loras"))
         civitai_tags_list = load_and_save_tags(lora_name["content"], force_fetch)
@@ -192,7 +194,9 @@ class LoraLoaderStackedAdvanced:
 
     def set_stack(self, lora_name, lora_weight, force_fetch, enable_preview, append_loraname_if_empty, lora_stack=None, override_lora_name=""):
         if override_lora_name != "":
-            lora_name = {"content": override_lora_name, "image": ""}
+            has_preview, prev = get_preview_path(override_lora_name, "loras")
+            prev = f"loras/{prev}" if has_preview else None
+            lora_name = {"content": override_lora_name, "image": prev, "type": "loras"}
         
         civitai_tags_list = load_and_save_tags(lora_name["content"], force_fetch)
 
