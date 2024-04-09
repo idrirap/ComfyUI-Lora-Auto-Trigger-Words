@@ -16,6 +16,13 @@ They get their vanilla equivalents with less features
 Overall, Custom-Scripts is recommended to be able to know the content of the tag lists with the node `showText`
 
 ## Features
+### Lora Trigger Words
+Lora trigger words are imported from two sources : 
+- Civitai api (only for civitai models)
+
+![image](./images/CivitaiTriggerWords.png)
+- Model training metadata (when available)
+
 #### Vanilla vs Advanced
 > Vanilla refers to nodes that have no lora preview from the menu, nor the lora list. But the features provided are the same.
 
