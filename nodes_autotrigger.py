@@ -56,7 +56,7 @@ class LoraLoaderVanilla:
 
         model_lora, clip_lora = load_lora_for_models(model, clip, lora, strength_model, strength_clip)
   
-        return (model_lora, clip_lora, civitai_tags_list, meta_tags_list, get_lora_name_from_lora_path(lora_name))
+        return (model_lora, clip_lora, civitai_tags_list, meta_tags_list, lora_name)
 
 class LoraLoaderStackedVanilla:
     @classmethod
@@ -96,7 +96,7 @@ class LoraLoaderStackedVanilla:
         if lora_stack is not None:
             loras.extend(lora_stack)
 
-        return (civitai_tags_list, meta_tags_list, loras, get_lora_name_from_lora_path(lora_name))
+        return (civitai_tags_list, meta_tags_list, loras, lora_name)
 
 class LoraLoaderAdvanced:
     def __init__(self):
@@ -162,10 +162,10 @@ class LoraLoaderAdvanced:
                     "subfolder": "lora_preview",
                     "type": "temp"
                 }
-                return {"ui": {"images": [preview_output]}, "result": (model_lora, clip_lora, civitai_tags_list, meta_tags_list, get_lora_name_from_lora_path(lora_name["content"]))}
+                return {"ui": {"images": [preview_output]}, "result": (model_lora, clip_lora, civitai_tags_list, meta_tags_list, lora_name["content"])}
 
 
-        return (model_lora, clip_lora, civitai_tags_list, meta_tags_list, get_lora_name_from_lora_path(lora_name["content"]))
+        return (model_lora, clip_lora, civitai_tags_list, meta_tags_list, lora_name["content"])
 
 class LoraLoaderStackedAdvanced:
     @classmethod
@@ -218,9 +218,9 @@ class LoraLoaderStackedAdvanced:
                     "subfolder": "lora_preview",
                     "type": "temp"
                 }
-                return {"ui": {"images": [preview_output]}, "result": (civitai_tags_list, meta_tags_list, loras, get_lora_name_from_lora_path(lora_name["content"]))}
+                return {"ui": {"images": [preview_output]}, "result": (civitai_tags_list, meta_tags_list, loras, lora_name["content"])}
         
-        return {"result": (civitai_tags_list, meta_tags_list, loras, get_lora_name_from_lora_path(lora_name["content"]))}
+        return {"result": (civitai_tags_list, meta_tags_list, loras, lora_name["content"])}
 
 class LoraTagsOnly:
     @classmethod
