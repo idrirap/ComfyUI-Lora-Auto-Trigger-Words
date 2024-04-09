@@ -217,8 +217,10 @@ def parse_selector(selector, tags_list):
 def append_lora_name_if_empty(tags_list, lora_path, enabled):
     if not enabled or len(tags_list) > 0:
         return tags_list
+    tags_list.append(get_lora_name_from_lora_path(lora_path))
+    return tags_list
+
+def get_lora_name_from_lora_path(lora_path):
     filename = os.path.splitext(lora_path)[0]
     filename = os.path.basename(filename)
-
-    tags_list.append(filename)
-    return tags_list
+    return filename

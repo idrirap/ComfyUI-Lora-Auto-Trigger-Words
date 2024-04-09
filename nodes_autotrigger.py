@@ -26,8 +26,8 @@ class LoraLoaderVanilla:
             }
         }
     
-    RETURN_TYPES = ("MODEL", "CLIP", "LIST", "LIST")
-    RETURN_NAMES = ("MODEL", "CLIP", "civitai_tags_list", "meta_tags_list")
+    RETURN_TYPES = ("MODEL", "CLIP", "LIST", "LIST", "STRING")
+    RETURN_NAMES = ("MODEL", "CLIP", "civitai_tags_list", "meta_tags_list", "lora_name")
     FUNCTION = "load_lora"
     CATEGORY = "autotrigger"
 
@@ -56,7 +56,7 @@ class LoraLoaderVanilla:
 
         model_lora, clip_lora = load_lora_for_models(model, clip, lora, strength_model, strength_clip)
   
-        return (model_lora, clip_lora, civitai_tags_list, meta_tags_list)
+        return (model_lora, clip_lora, civitai_tags_list, meta_tags_list, get_lora_name_from_lora_path(lora_name))
 
 class LoraLoaderStackedVanilla:
     @classmethod
@@ -75,8 +75,8 @@ class LoraLoaderStackedVanilla:
             }
         }
 
-    RETURN_TYPES = ("LIST", "LIST", "LORA_STACK",)
-    RETURN_NAMES = ("civitai_tags_list", "meta_tags_list", "LORA_STACK",)
+    RETURN_TYPES = ("LIST", "LIST", "LORA_STACK", "STRING")
+    RETURN_NAMES = ("civitai_tags_list", "meta_tags_list", "LORA_STACK", "lora_name")
     FUNCTION = "set_stack"
     #OUTPUT_NODE = False
     CATEGORY = "autotrigger"
@@ -96,7 +96,7 @@ class LoraLoaderStackedVanilla:
         if lora_stack is not None:
             loras.extend(lora_stack)
 
-        return (civitai_tags_list, meta_tags_list, loras)
+        return (civitai_tags_list, meta_tags_list, loras, get_lora_name_from_lora_path(lora_name))
 
 class LoraLoaderAdvanced:
     def __init__(self):
@@ -122,8 +122,8 @@ class LoraLoaderAdvanced:
             }
         }
     
-    RETURN_TYPES = ("MODEL", "CLIP", "LIST", "LIST")
-    RETURN_NAMES = ("MODEL", "CLIP", "civitai_tags_list", "meta_tags_list")
+    RETURN_TYPES = ("MODEL", "CLIP", "LIST", "LIST", "STRING")
+    RETURN_NAMES = ("MODEL", "CLIP", "civitai_tags_list", "meta_tags_list", "lora_name")
     FUNCTION = "load_lora"
     CATEGORY = "autotrigger"
 
@@ -162,10 +162,10 @@ class LoraLoaderAdvanced:
                     "subfolder": "lora_preview",
                     "type": "temp"
                 }
-                return {"ui": {"images": [preview_output]}, "result": (model_lora, clip_lora, civitai_tags_list, meta_tags_list)}
+                return {"ui": {"images": [preview_output]}, "result": (model_lora, clip_lora, civitai_tags_list, meta_tags_list, get_lora_name_from_lora_path(lora_name["content"]))}
 
 
-        return (model_lora, clip_lora, civitai_tags_list, meta_tags_list)
+        return (model_lora, clip_lora, civitai_tags_list, meta_tags_list, get_lora_name_from_lora_path(lora_name["content"]))
 
 class LoraLoaderStackedAdvanced:
     @classmethod
@@ -186,8 +186,8 @@ class LoraLoaderStackedAdvanced:
             }
         }
 
-    RETURN_TYPES = ("LIST", "LIST", "LORA_STACK",)
-    RETURN_NAMES = ("civitai_tags_list", "meta_tags_list", "LORA_STACK",)
+    RETURN_TYPES = ("LIST", "LIST", "LORA_STACK", "STRING")
+    RETURN_NAMES = ("civitai_tags_list", "meta_tags_list", "LORA_STACK", "lora_name")
     FUNCTION = "set_stack"
     #OUTPUT_NODE = False
     CATEGORY = "autotrigger"
@@ -218,9 +218,9 @@ class LoraLoaderStackedAdvanced:
                     "subfolder": "lora_preview",
                     "type": "temp"
                 }
-                return {"ui": {"images": [preview_output]}, "result": (civitai_tags_list, meta_tags_list, loras)}
+                return {"ui": {"images": [preview_output]}, "result": (civitai_tags_list, meta_tags_list, loras, get_lora_name_from_lora_path(lora_name["content"]))}
         
-        return {"result": (civitai_tags_list, meta_tags_list, loras)}
+        return {"result": (civitai_tags_list, meta_tags_list, loras, get_lora_name_from_lora_path(lora_name["content"]))}
 
 class LoraTagsOnly:
     @classmethod
