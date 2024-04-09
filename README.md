@@ -2,37 +2,80 @@
 
 This project is a fork of https://github.com/Extraltodeus/LoadLoraWithTags
 The aim of these custom nodes is to get an _easy_ access to the tags used to trigger a lora. 
-This project is compatible with Stacked Loras from https://github.com/LucianoCirino/efficiency-nodes-comfyui/releases
-I talk about **lora**, but works with **lycoris** too.
+This project is compatible with Stacked Loras from https://github.com/jags111/efficiency-nodes-comfyui  
+When I talk about **lora**, I also mean **lycoris** too.
 
 ## Install
 Some of this project nodes depends on https://github.com/pythongosssss/ComfyUI-Custom-Scripts :
 - LoraLoaderAdvanced
 - LoraLoaderStackedAdvanced
+- `View info...`
 They get their vanilla equivalents. 
 
 Overall, Custom-Scripts is recommended to be able to know the content of the tag lists with the node `showText`
 
 ## Features
-### Main nodes
 #### Vanilla vs Advanced
 Vanilla refers to nodes that have no lora preview from the menu, nor the lora list. But the features provided are the same.
 ![image](./images/main.png)
-#### Nodes
-- LoraLoader (Vanilla or Advanced)
-- LoraLoaderStacked (Vanilla or Avanced). The stacked lora input is optional.
-Allow to load a lora, either the normal way, or the efficiency-nodes way.
-These loaders have two custom outputs:
-- civitai_tags_list: a python list of the tags related to this lora on civitai
-- meta_tags_list: a python list of the tags used for training the lora embeded in it (if any)
-This outputs needs to be filtered by two othere nodes:
-- TagsFormater: Helper to show the available tag and their indexes
-- tagsSelector: allow to filter tags and apply a weight to it.
-    - TagSelector contains four parameters. First the selector (see Filtering next)
-    - The weight `(tag:weight)`
-    - The boolean `ensure_comma`. To properly append comma if a prefix or suffix is added.
-    - The boolean `append_loraname_if_empty` which will add the name of the lora in the list of outputs if they are empty.
-#### Filtering
+### Nodes
+#### LoraLoader (Vanilla and Advanced)
+![image](./images/LoraLoader.png)
+INPUT
+- `override_lora_name` (optional): Used to ignore the field `lora_name` and use the name passed. Should use [LoraListNames](#loralistnames) or the `lora_name` output.
+
+FIELDS
+- `force_fetch`: Force the civitai fetching of data even if there is already something saved
+- `enable_preview`: Toggle on/off the saved lora preview if any (only in advanced)
+- `append_lora_if_empty`: Add the name of the lora to the list of tags if the list is empty 
+
+OUTPUT
+- `civitai_tags_list`: a python list of the tags related to this lora on civitai
+- `meta_tags_list`: a python list of the tags used for training the lora embeded in it (if any)
+- `lora_name`: the name of the current selected lora
+#### LoraLoaderStacked (Vanilla and Avanced). 
+![image](./images/LoraLoaderStacked.png)
+INPUT
+- `lora_stack` (optional): another stack of lora.
+- `override_lora_name` (optional): Used to ignore the field `lora_name` and use the name passed. Should use [LoraListNames](#loralistnames) or the `lora_name` output.
+
+FIELDS
+- `force_fetch`: Force the civitai fetching of data even if there is already something saved
+- `enable_preview`: Toggle on/off the saved lora preview if any (only in advanced)
+- `append_lora_if_empty`: Add the name of the lora to the list of tags if the list is empty 
+
+OUTPUT
+- `civitai_tags_list`: a python list of the tags related to this lora on civitai
+- `meta_tags_list`: a python list of the tags used for training the lora embeded in it (if any)
+- `lora_name`: the name of the current selected lora
+#### LoraTagsOnly 
+![image](./images/LoraTagsOnly.png)
+To get the tags without using the lora.
+- `override_lora_name` (optional): Used to ignore the field `lora_name` and use the name passed. Should use [LoraListNames](#loralistnames) or the `lora_name` output.
+
+OUTPUT
+- `civitai_tags_list`: a python list of the tags related to this lora on civitai
+- `meta_tags_list`: a python list of the tags used for training the lora embeded in it (if any)
+- `lora_name`: the name of the current selected lora
+
+
+#### TagsFormater
+![image](./images/TagsFormater.png)
+Helper to show the available tag and their indexes. Tags are sorted by training frequence. The more a tag was used, the higher in the list it is. Works for both `civitai_tags_list` and `meta_tags_list`
+
+#### TagsSelector
+![image](./images/TagsSelector.png)
+Allow to filter tags and apply a weight to it.  
+TagSelector contains four parameters. 
+- `selector` (see the [Filtering](#filtering) section next)
+- `weight`: to format the tag like `(tag:weight)`. Default set to 1 without the weight like `tag`.
+- `ensure_comma`. To properly append comma if a prefix or suffix is added.
+
+#### LoraListNames
+![image](./images/LoraListNames.png)
+List all the existing lora names. It is used as an input for `override_lora_name`
+
+### Filtering
 The format is simple. It's the same as python list index, but can select multiple index or ranges of indexes separated by comas.
 `Ex: 0, 3, 5:8, -8:`
 - Select a specific list of indexes: `0, 2, 3, 15`...
@@ -42,6 +85,7 @@ The format is simple. It's the same as python list index, but can select multipl
 - You can use negative indexes. Like `-1` to select the last tag
 - By default `:` selects everything
 
+### Examples
 #### Example of normal workflow
 ![image](./images/loaderAdvanced.png)
 
@@ -55,5 +99,5 @@ Lora Stack can also be chained together to load multiple loras into an efficient
 
 ### Side nodes I made and kept here
 - FusionText: takes two text input and join them together
-- Randomizer: takes two couples text+lorastack and return randomly one them
+- Randomizer: takes two couples text+lorastack and return randomly one of them
 - TextInputBasic: just a text input with two additional input for text chaining
