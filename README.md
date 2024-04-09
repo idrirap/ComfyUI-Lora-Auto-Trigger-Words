@@ -10,7 +10,8 @@ Some of this project nodes depends on https://github.com/pythongosssss/ComfyUI-C
 - LoraLoaderAdvanced
 - LoraLoaderStackedAdvanced
 - `View info...`
-They get their vanilla equivalents. 
+
+They get their vanilla equivalents with less features
 
 Overall, Custom-Scripts is recommended to be able to know the content of the tag lists with the node `showText`
 
