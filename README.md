@@ -16,7 +16,8 @@ Overall, Custom-Scripts is recommended to be able to know the content of the tag
 
 ## Features
 #### Vanilla vs Advanced
-Vanilla refers to nodes that have no lora preview from the menu, nor the lora list. But the features provided are the same.
+> Vanilla refers to nodes that have no lora preview from the menu, nor the lora list. But the features provided are the same.
+
 ![image](./images/main.png)
 ### Nodes
 #### LoraLoader (Vanilla and Advanced)
@@ -58,7 +59,6 @@ OUTPUT
 - `meta_tags_list`: a python list of the tags used for training the lora embeded in it (if any)
 - `lora_name`: the name of the current selected lora
 
-
 #### TagsFormater
 ![image](./images/TagsFormater.png)
 Helper to show the available tag and their indexes. Tags are sorted by training frequence. The more a tag was used, the higher in the list it is. Works for both `civitai_tags_list` and `meta_tags_list`
@@ -84,6 +84,10 @@ The format is simple. It's the same as python list index, but can select multipl
 - Select a range from a specific index to the end: `5:`
 - You can use negative indexes. Like `-1` to select the last tag
 - By default `:` selects everything
+
+### View Info
+![image](./images/ViewInfo.png)
+Pythongossss's [View Info...](https://github.com/pythongosssss/ComfyUI-Custom-Scripts?tab=readme-ov-file#checkpointloraembedding-info) feature from ComfyUI-Custom-Scripts
 
 ### Examples
 #### Example of normal workflow
