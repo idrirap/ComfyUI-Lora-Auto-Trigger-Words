@@ -1,0 +1,14 @@
+[project]
+name = "comfyui-lora-auto-trigger-words"
+description = "This project is a fork of [a/https://github.com/Extraltodeus/LoadLoraWithTags](https://github.com/Extraltodeus/LoadLoraWithTags) The aim of these custom nodes is to get an easy access to the tags used to trigger a lora."
+version = "1.0.0"
+license = "LICENSE"
+
+[project.urls]
+Repository = "https://github.com/idrirap/ComfyUI-Lora-Auto-Trigger-Words"
+#  Used by Comfy Registry https://comfyregistry.org
+
+[tool.comfy]
+PublisherId = ""
+DisplayName = "ComfyUI-Lora-Auto-Trigger-Words"
+Icon = ""
