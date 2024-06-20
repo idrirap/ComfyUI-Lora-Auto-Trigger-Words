@@ -1,6 +1,6 @@
 [project]
 name = "comfyui-lora-auto-trigger-words"
-description = "This project is a fork of [a/https://github.com/Extraltodeus/LoadLoraWithTags](https://github.com/Extraltodeus/LoadLoraWithTags) The aim of these custom nodes is to get an easy access to the tags used to trigger a lora."
+description = "The aim of these custom nodes is to get an easy access to the tags used to trigger a lora / lycoris. Extract the tags from civitai or from the safetensors metadatas when available."
 version = "1.0.0"
 license = "LICENSE"
 
