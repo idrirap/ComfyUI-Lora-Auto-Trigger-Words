@@ -9,6 +9,6 @@ Repository = "https://github.com/idrirap/ComfyUI-Lora-Auto-Trigger-Words"
 #  Used by Comfy Registry https://comfyregistry.org
 
 [tool.comfy]
-PublisherId = ""
+PublisherId = "dijkstra"
 DisplayName = "ComfyUI-Lora-Auto-Trigger-Words"
 Icon = ""
