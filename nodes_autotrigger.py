@@ -32,6 +32,8 @@ class LoraLoaderVanilla:
     CATEGORY = "autotrigger"
 
     def load_lora(self, model, lora_name, strength_model, strength_clip, force_fetch, append_loraname_if_empty, clip=None, override_lora_name=""):
+        if clip is None:
+            strength_clip=0
         if override_lora_name != "":
             lora_name = override_lora_name
         meta_tags_list = sort_tags_by_frequency(get_metadata(lora_name, "loras"))
@@ -128,6 +130,8 @@ class LoraLoaderAdvanced:
     CATEGORY = "autotrigger"
 
     def load_lora(self, model, lora_name, strength_model, strength_clip, force_fetch, enable_preview, append_loraname_if_empty, clip=None, override_lora_name=""):
+        if clip is None:
+            strength_clip=0
         if override_lora_name != "":
             has_preview, prev = get_preview_path(override_lora_name, "loras")
             prev = f"loras/{prev}" if has_preview else None
