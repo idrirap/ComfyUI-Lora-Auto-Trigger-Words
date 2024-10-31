@@ -14,7 +14,6 @@ class LoraLoaderVanilla:
         return {
             "required": { 
                 "model": ("MODEL",),
-                "clip": ("CLIP", ),
                 "lora_name": (LORA_LIST, ),
                 "strength_model": ("FLOAT", {"default": 1.0, "min": -10.0, "max": 10.0, "step": 0.01}),
                 "strength_clip": ("FLOAT", {"default": 1.0, "min": -10.0, "max": 10.0, "step": 0.01}),
@@ -22,6 +21,7 @@ class LoraLoaderVanilla:
                 "append_loraname_if_empty": ("BOOLEAN", {"default": False}),
             },
             "optional": {
+                "clip": ("CLIP", ),
                 "override_lora_name":("STRING", {"forceInput": True}), 
             }
         }
@@ -31,7 +31,9 @@ class LoraLoaderVanilla:
     FUNCTION = "load_lora"
     CATEGORY = "autotrigger"
 
-    def load_lora(self, model, clip, lora_name, strength_model, strength_clip, force_fetch, append_loraname_if_empty, override_lora_name=""):
+    def load_lora(self, model, lora_name, strength_model, strength_clip, force_fetch, append_loraname_if_empty, clip=None, override_lora_name=""):
+        if clip is None:
+            strength_clip=0
         if override_lora_name != "":
             lora_name = override_lora_name
         meta_tags_list = sort_tags_by_frequency(get_metadata(lora_name, "loras"))
@@ -109,7 +111,6 @@ class LoraLoaderAdvanced:
         return {
             "required": { 
                 "model": ("MODEL",),
-                "clip": ("CLIP", ),
                 "lora_name": (LORA_LIST, ),
                 "strength_model": ("FLOAT", {"default": 1.0, "min": -10.0, "max": 10.0, "step": 0.01}),
                 "strength_clip": ("FLOAT", {"default": 1.0, "min": -10.0, "max": 10.0, "step": 0.01}),
@@ -118,6 +119,7 @@ class LoraLoaderAdvanced:
                 "append_loraname_if_empty": ("BOOLEAN", {"default": False}),
             },
             "optional": {
+                "clip": ("CLIP", ),
                 "override_lora_name":("STRING", {"forceInput": True}), 
             }
         }
@@ -127,7 +129,9 @@ class LoraLoaderAdvanced:
     FUNCTION = "load_lora"
     CATEGORY = "autotrigger"
 
-    def load_lora(self, model, clip, lora_name, strength_model, strength_clip, force_fetch, enable_preview, append_loraname_if_empty, override_lora_name=""):
+    def load_lora(self, model, lora_name, strength_model, strength_clip, force_fetch, enable_preview, append_loraname_if_empty, clip=None, override_lora_name=""):
+        if clip is None:
+            strength_clip=0
         if override_lora_name != "":
             has_preview, prev = get_preview_path(override_lora_name, "loras")
             prev = f"loras/{prev}" if has_preview else None
@@ -252,7 +256,6 @@ class LoraTagsOnly:
         civitai_tags_list = append_lora_name_if_empty(civitai_tags_list, lora_name, append_loraname_if_empty)
 
         return (civitai_tags_list, meta_tags_list)
-
 
 # A dictionary that contains all nodes you want to export with their names
 # NOTE: names should be globally unique
