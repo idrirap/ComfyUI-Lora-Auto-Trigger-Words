@@ -1,7 +1,7 @@
 [project]
 name = "comfyui-lora-auto-trigger-words"
 description = "The aim of these custom nodes is to get an easy access to the tags used to trigger a lora / lycoris. Extract the tags from civitai or from the safetensors metadatas when available."
-version = "1.0.3"
+version = "1.0.4"
 license = "MIT"
 
 [project.urls]
