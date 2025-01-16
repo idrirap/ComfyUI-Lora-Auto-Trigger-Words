@@ -83,8 +83,11 @@ def save_dict_to_json(data_dict, file_path):
 
 def get_model_version_info(hash_value):
     api_url = f"https://civitai.com/api/v1/model-versions/by-hash/{hash_value}"
-    response = requests.get(api_url)
-    
+    try:
+        response = requests.get(api_url)
+    except Exception as e:
+        print(f"[Lora-Auto-Trigger] {e}")
+        return None
     if response.status_code == 200:
         return response.json()
     else:
