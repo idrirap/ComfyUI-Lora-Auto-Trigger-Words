@@ -107,7 +107,6 @@ class LoraLoaderAdvanced:
     @classmethod
     def INPUT_TYPES(s):
         LORA_LIST = sorted(folder_paths.get_filename_list("loras"), key=str.lower)
-        populate_items(LORA_LIST, "loras")
         return {
             "required": { 
                 "model": ("MODEL",),
@@ -175,7 +174,6 @@ class LoraLoaderStackedAdvanced:
     @classmethod
     def INPUT_TYPES(s):
         LORA_LIST = folder_paths.get_filename_list("loras")
-        populate_items(LORA_LIST, "loras")
         return {
             "required": {
                "lora_name": (LORA_LIST,),
