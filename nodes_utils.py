@@ -65,38 +65,65 @@ class TextInputBasic:
         return (prefix + text + suffix, )
     
 
+# 定义一个标签选择器类
+# Define a tag selector class
 class TagsSelector:
+    
+    # 定义输入类型信息（ComfyUI 或类似框架的自定义节点接口）
+    # Define the input types for the node (used by ComfyUI or similar frameworks)
     @classmethod
     def INPUT_TYPES(s):
         return {
-            "required": { 
-                "tags_list": ("LIST", {"default": []}),
-                "selector": ("STRING", {"default": ":"}),
-                "weight": ("FLOAT", {"default": 1.0, "min": -10.0, "max": 10.0, "step": 0.01}),
-                "ensure_comma": ("BOOLEAN", {"default": True})
+            "required": {  # 必填项 / Required fields
+                "tags_list": ("LIST", {"default": []}),  # 标签列表，预期是字符串组成的列表 / List of tags (e.g., ["sunlight", "fog"])
+                "selector": ("STRING", {"default": ":"}),  # 选择器表达式，用于组合标签 / Selector expression to combine tags
+                "weight": ("FLOAT", {
+                    "default": 1.0, "min": -10.0, "max": 10.0, "step": 0.01
+                }),  # 标签权重 / Tag weight
+                "ensure_comma": ("BOOLEAN", {"default": True})  # 是否确保末尾加逗号 / Whether to append a comma at the end
             },
-            "optional": {
-                "prefix":("STRING", {"default":"", "forceInput": True}), 
-                "suffix":("STRING", {"default":"", "forceInput": True}), 
+            "optional": {  # 可选项 / Optional fields
+                "prefix":("STRING", {"default":"", "forceInput": True}),  # 前缀字符串 / Optional prefix string
+                "suffix":("STRING", {"default":"", "forceInput": True}),  # 后缀字符串 / Optional suffix string
             }
         }
-    
+
+    # 返回类型为字符串 / This node returns a single string
     RETURN_TYPES = ("STRING",)
+    
+    # 该节点执行的函数名 / Function to call when this node is executed
     FUNCTION = "select_tags"
+    
+    # 所属分类，用于在 UI 中组织节点 / Category used in UI organization
     CATEGORY = "autotrigger"
 
+    # 标签选择与格式化主逻辑函数
+    # Main logic for selecting and formatting tags
     def select_tags(self, tags_list, selector, weight, ensure_comma, prefix="", suffix=""):
+        
+        # 如果权重不是 1.0，则将每个标签包装为 (tag:weight) 格式
+        # Format each tag as (tag:weight) if weight is not 1.0
         if weight != 1.0:
             tags_list = [f"({tag}:{weight})" for tag in tags_list]
+
+        # 使用选择器语法处理标签组合（需自定义 parse_selector 函数）
+        # Use the selector expression to combine tags (parse_selector is assumed to be defined elsewhere)
         output = parse_selector(selector, tags_list)
-        if ensure_comma:
-            striped_prefix = prefix.strip()
-            striped_suffix = suffix.strip()
-            if striped_prefix != "" and not striped_prefix.endswith(",") and output != "" and not output.startswith(","):
-                prefix = striped_prefix + ", "
-            if output != "" and not output.endswith(",") and striped_suffix != "" and not striped_suffix.startswith(","):
-                suffix = ", " + striped_suffix
+
+        # 防止输出为空或为 None 时返回 None
+        # Avoid returning None if output is empty or invalid
+        if output is None:
+            output = ""
+
+        # 如果启用了 ensure_comma，且输出非空且未以逗号结尾，则添加逗号
+        # Append comma if ensure_comma is True and output is non-empty and not ending with comma
+        if ensure_comma and output != "" and not output.endswith(","):
+            output += ","
+
+        # 拼接前缀 + 输出 + 后缀，返回字符串元组
+        # Return the final string with prefix and suffix wrapped as a tuple
         return (prefix + output + suffix, )
+
 
 class TagsFormater:
     @classmethod
