@@ -97,8 +97,15 @@ The format is simple. It's the same as python list index, but can select multipl
 - By default `:` selects everything
 
 ### View Info
-![image](./images/ViewInfo.png)
-Pythongossss's [View Info...](https://github.com/pythongosssss/ComfyUI-Custom-Scripts?tab=readme-ov-file#checkpointloraembedding-info) feature from ComfyUI-Custom-Scripts
+![image](./images/ViewInfo.png)  
+
+Pythongossss's [View Info...](https://github.com/pythongosssss/ComfyUI-Custom-Scripts?tab=readme-ov-file#checkpointloraembedding-info) feature from ComfyUI-Custom-Scripts  
+
+To enable this feature go into Settings > Pysssss > ModelInfo > 🐍 Model Info - Lora Nodes/Widgets  
+And add the following at the end of the line:
+```
+LoraLoaderVanilla.lora_name,LoraLoaderStackedVanilla.lora_name,LoraLoaderAdvanced.lora_name,LoraLoaderStackedAdvanced.lora_name,LoraTagsOnly.lora_name
+```
 
 ### Examples
 #### Example of normal workflow
