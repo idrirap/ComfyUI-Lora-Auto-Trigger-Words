@@ -1,7 +1,10 @@
 # ComfyUI-Lora-Auto-Trigger-Words
 
 This project is a fork of https://github.com/Extraltodeus/LoadLoraWithTags
-The aim of these custom nodes is to get an _easy_ access to the tags used to trigger a lora. 
+The aim of these custom nodes is to get an _easy_ access to the **trigger words** (or **tags**) used to trigger a lora. 
+
+*Note that trigger words and tags are used interchangeably in this readme and means the same thing.*
+
 This project is compatible with Stacked Loras from https://github.com/jags111/efficiency-nodes-comfyui  
 When I talk about **lora**, I also mean **lycoris** too.
 
