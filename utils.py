@@ -3,63 +3,6 @@ import hashlib
 import json
 import os
 import requests
-import shutil
-
-def get_preview_path(name, type):
-    file_name = os.path.splitext(name)[0]
-    file_path = folder_paths.get_full_path(type, name)
-
-    if file_path is None:
-        print(f"Unable to get path for {type} {name}")
-        return None
-    
-    file_path_no_ext = os.path.splitext(file_path)[0]
-    item_image=None
-    for ext in ["png", "jpg", "jpeg", "gif"]:
-        if item_image is not None:
-            break
-        for ext2 in ["", ".preview"]:
-            has_image = os.path.isfile(file_path_no_ext + ext2 + "." + ext)
-            if has_image:
-                item_image = f"{file_name}{ext2}.{ext}"
-                break
-        
-    return has_image, item_image
-
-
-def copy_preview_to_temp(file_name):
-    if file_name is None:
-        return None, None
-    base_name = os.path.basename(file_name)
-    lora_less = "/".join(file_name.split("/")[1:])
-
-    file_path = folder_paths.get_full_path("loras", lora_less)
-    if file_path is None:
-        return None, None
-
-    temp_path = folder_paths.get_temp_directory()
-    preview_path = os.path.join(temp_path, "lora_preview")
-    if not os.path.isdir(preview_path) :
-        os.makedirs(preview_path)
-    preview_path = os.path.join(preview_path, base_name)
-
-
-    shutil.copyfile(file_path, preview_path)
-    return preview_path, base_name
-
-# add previews in selectors
-def populate_items(names, type):
-    for idx, item_name in enumerate(names):
-
-        has_image, item_image = get_preview_path(item_name, type)
-
-        names[idx] = {
-            "content": item_name,
-            "image": f"{type}/{item_image}" if has_image else None,
-            "type": "loras",
-        }
-    names.sort(key=lambda i: i["content"].lower())
-
 
 def load_json_from_file(file_path):
     try:
@@ -132,14 +75,6 @@ def load_and_save_tags(lora_name, force_fetch):
             save_dict_to_json(lora_tags,json_tags_path)
 
     return output_tags_list
-
-def show_list(list_input):
-    i = 0
-    output = ""
-    for debug in list_input:
-        output += f"{i} : {debug}\n"
-        i+=1
-    return output
 
 def get_metadata(filepath, type):
     filepath = folder_paths.get_full_path(type, filepath)
